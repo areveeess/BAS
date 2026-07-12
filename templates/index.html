@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAS Stowage Management - Modern UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased">
+
+    <header class="bg-slate-900 shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-semibold text-slate-100 flex items-center gap-3">
+                <i class="fas fa-boxes text-blue-500"></i>
+                <span>BAS Stowage Management</span>
+            </h1>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-10">
+        <div id="messageArea" class="notification-banner hidden"></div>
+
+        <!-- ****MODIFIED GRID CLASS HERE**** -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+            <!-- Added lg:grid-cols-3 and 2xl:grid-cols-4 -->
+            <!-- Removed xl breakpoint -->
+
+            <!-- Card: Initialization -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-cloud-upload-alt text-blue-400"></i>
+                        Initialization
+                    </h2>
+                    <p class="card-description">Upload data files and generate the initial placement plan.</p>
+                </div>
+                <div class="card-body space-y-4">
+                    <!-- Import Containers -->
+                    <form id="importContainersForm" class="space-y-3" enctype="multipart/form-data">
+                         <label class="file-upload-label">
+                            <input type="file" id="containersFile" name="containersFile" accept=".csv" required class="file-upload-input">
+                            <i class="fas fa-file-csv text-lg text-slate-500"></i>
+                            <span class="file-upload-text">Choose Containers CSV</span>
+                        </label>
+                        <button type="submit" class="button button-primary w-full justify-center">
+                            <i class="fas fa-upload"></i> Upload Containers
+                        </button>
+                        <pre id="containersResult" class="result-output hidden"></pre>
+                    </form>
+                    <hr class="subtle-divider">
+                    <!-- Import Items -->
+                    <form id="importItemsForm" class="space-y-3" enctype="multipart/form-data">
+                        <label class="file-upload-label">
+                            <input type="file" id="itemsFile" name="itemsFile" accept=".csv" required class="file-upload-input">
+                            <i class="fas fa-file-csv text-lg text-slate-500"></i>
+                            <span class="file-upload-text">Choose Items CSV</span>
+                         </label>
+                        <button type="submit" class="button button-primary w-full justify-center">
+                            <i class="fas fa-upload"></i> Upload Items
+                        </button>
+                        <pre id="itemsResult" class="result-output hidden"></pre>
+                    </form>
+                    <hr class="subtle-divider">
+                    <!-- Calculate Placement -->
+                    <div class="space-y-3">
+                        <h3 class="text-sm font-medium text-slate-400">Placement Generation</h3>
+                        <button id="triggerPlacementButton" class="button button-secondary w-full justify-center">
+                            <i class="fas fa-calculator"></i> Calculate Placement Plan
+                        </button>
+                        <pre id="placementResult" class="result-output hidden"></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card: Item Operations -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-cogs text-teal-400"></i>
+                        Item Operations
+                    </h2>
+                    <p class="card-description">Search for items and manage retrieval processes.</p>
+                </div>
+                <div class="card-body space-y-5">
+                    <!-- Search -->
+                    <form id="searchForm" class="space-y-3">
+                         <label for="searchQuery" class="form-label">Search Item Location</label>
+                         <div class="flex gap-2">
+                            <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter Name or ID" required class="form-input flex-grow">
+                            <select id="searchType" name="searchType" class="form-select">
+                                <option value="itemName">Name</option>
+                                <option value="itemId">ID</option>
+                            </select>
+                            <button type="submit" class="button button-primary px-4 flex-shrink-0">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <pre id="searchResult" class="result-output hidden"></pre>
+                    </form>
+                    <hr class="subtle-divider">
+                     <!-- Confirm Retrieval -->
+                     <div>
+                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2">
+                            <i class="fas fa-hand-paper text-orange-400"></i>Confirm Item Retrieval
+                        </h3>
+                        <form id="retrieveForm" class="space-y-3">
+                            <label for="retrieveItemId" class="form-label">Item ID to Retrieve</label>
+                            <input type="text" id="retrieveItemId" name="itemId" placeholder="Enter Item ID" required class="form-input w-full">
+                            <button type="submit" class="button button-primary w-full justify-center">
+                                <i class="fas fa-check-circle"></i> Confirm Retrieval
+                            </button>
+                        </form>
+                        <pre id="retrieveResult" class="result-output hidden mt-3"></pre>
+                    </div>
+                    <hr class="subtle-divider">
+                     <!-- Identify Waste -->
+                     <div>
+                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2"><i class="fas fa-recycle text-red-400"></i>Identify Waste</h3>
+                        <button id="identifyWasteButton" class="button button-secondary w-full justify-center">
+                           <i class="fas fa-search-dollar"></i> Identify Potentially Wasted Items
+                        </button>
+                        <pre id="wasteIdentifyResult" class="result-output hidden mt-3"></pre>
+                     </div>
+                     <hr class="subtle-divider">
+                     <!-- Waste Return Plan -->
+                     <div>
+                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2">
+                            <i class="fas fa-clipboard-list text-green-400"></i>Generate Waste Return Plan
+                        </h3>
+                        <form id="wasteReturnPlanForm" class="space-y-3">
+                            <label for="undockingContainerId" class="form-label">Undocking Container ID</label>
+                            <input type="text" id="undockingContainerId" name="undockingContainerId" placeholder="Enter Container ID" required class="form-input w-full">
+
+                            <label for="undockingDate" class="form-label">Undocking Date</label>
+                            <div class="flex gap-2">
+                                <input type="date" id="undockingDate" name="undockingDate" required class="form-input flex-grow">
+                                <button type="button" id="setCurrentDateButton" class="button button-secondary px-4 flex-shrink-0">
+                                    Use Current Date
+                                </button>
+                            </div>
+
+                            <label for="maxWeight" class="form-label">Maximum Weight (kg)</label>
+                            <input type="number" id="maxWeight" name="maxWeight" placeholder="Enter Max Weight" required min="1" class="form-input w-full">
+
+                            <button type="submit" class="button button-primary w-full justify-center">
+                                <i class="fas fa-clipboard-check"></i> Generate Return Plan
+                            </button>
+                        </form>
+                        <pre id="wasteReturnPlanResult" class="result-output hidden mt-3"></pre>
+                     </div>
+                </div>
+            </section>
+
+            <!-- Card: Simulation -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-forward text-indigo-400"></i>
+                        Day Simulation
+                    </h2>
+                     <p class="card-description">Simulate daily operations and observe stock changes.</p>
+                </div>
+                <div class="card-body">
+                    <form id="simulateForm" class="space-y-4">
+                        <div>
+                            <label for="simulateDays" class="form-label">Number of Days to Simulate</label>
+                            <input type="number" id="simulateDays" name="numOfDays" value="1" min="1" required class="form-input w-full">
+                        </div>
+                        <div>
+                             <label for="simulateItems" class="form-label">Daily Items Used <span class="text-slate-500 text-xs">(Optional, comma-separated IDs)</span></label>
+                             <input type="text" id="simulateItems" name="itemsToBeUsedPerDay" placeholder="item-123, item-456" class="form-input w-full">
+                        </div>
+                        <button type="submit" class="button button-primary w-full justify-center">
+                            <i class="fas fa-play-circle"></i> Run Simulation
+                        </button>
+                    </form>
+                     <pre id="simulateResult" class="result-output hidden mt-4"></pre>
+                </div>
+            </section>
+
+             <!-- Card: Export & Logs -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-database text-emerald-400"></i>
+                        Export & Logs
+                    </h2>
+                     <p class="card-description">Download stowage data and filter activity records.</p>
+                </div>
+                <div class="card-body space-y-5">
+                    <!-- Export -->
+                     <div>
+                        <h3 class="text-sm font-medium text-slate-400 mb-2">Export Data</h3>
+                        <a href="/api/export/arrangement" download class="button button-secondary w-full justify-center">
+                            <i class="fas fa-download"></i> Export Current Arrangement (CSV)
+                        </a>
+                    </div>
+                    <hr class="subtle-divider">
+                    <!-- Activity Logs -->
+                    <div>
+                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2">
+                            <i class="fas fa-file-alt text-blue-400"></i>Activity Logs
+                        </h3>
+                        <form id="logsForm" class="space-y-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <div class="flex gap-2">
+                                <input type="date" id="startDate" name="startDate" class="form-input flex-grow">
+                                <button type="button" id="setEarliestDateButton" class="button button-secondary px-4 flex-shrink-0">
+                                    Earliest Date
+                                </button>
+                            </div>
+
+                            <label for="endDate" class="form-label">End Date</label>
+                            <div class="flex gap-2">
+                                <input type="date" id="endDate" name="endDate" class="form-input flex-grow">
+                                <button type="button" id="setLatestDateButton" class="button button-secondary px-4 flex-shrink-0">
+                                    Latest Date
+                                </button>
+                            </div>
+
+                            <label for="itemId" class="form-label">Item ID</label>
+                            <input type="text" id="itemId" name="itemId" placeholder="Enter Item ID" class="form-input w-full">
+
+                            <label for="userId" class="form-label">User ID</label>
+                            <input type="text" id="userId" name="userId" placeholder="Enter User ID" class="form-input w-full">
+
+                            <label for="actionType" class="form-label">Action Type</label>
+                            <input type="text" id="actionType" name="actionType" placeholder="Enter Action Type" class="form-input w-full">
+
+                            <button type="submit" class="button button-primary w-full justify-center">
+                                <i class="fas fa-search"></i> Search Logs
+                            </button>
+                        </form>
+                        <pre id="logsResult" class="result-output hidden mt-3"></pre>
+                    </div>
+                    <hr class="subtle-divider">
+                </div>
+            </section>
+
+        </div> <!-- End grid -->
+    </main>
+
+    <footer class="text-center py-6 mt-10 border-t border-slate-800">
+        <p class="text-xs text-slate-500">© 2023 BAS Stowage Management System. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
