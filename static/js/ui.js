@@ -222,6 +222,7 @@ export async function runAction({ view, button, busyLabel, output, mutates = fal
 /* ── Toasts ──────────────────────────────────────────────────────────────── */
 
 const MAX_TOASTS = 3;
+const TOAST_ICON = { success: 'check', error: 'alert', info: 'info' };
 const TOAST_MS = 5000;
 
 export function toast(message, { tone = 'success', action } = {}) {
@@ -229,7 +230,7 @@ export function toast(message, { tone = 'success', action } = {}) {
     while (host.children.length >= MAX_TOASTS) removeToast(host.firstElementChild);
 
     const el = h('div', { class: 'toast', role: tone === 'error' ? 'alert' : 'status', dataset: { tone } },
-        icon(tone === 'error' ? 'alert' : 'check'),
+        icon(TOAST_ICON[tone] ?? 'check'),
         h('span', { class: 'toast-text' }, message),
         action && h('a', { class: 'btn btn-plain', href: action.href }, action.label),
         h('button', { class: 'toast-close', type: 'button', 'aria-label': 'Dismiss', onclick: () => dismissToast(el) }, icon('x')));

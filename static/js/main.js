@@ -74,7 +74,7 @@ function show(name, { userInitiated }) {
 function route(userInitiated) {
     const name = viewFromHash();
     if (!name) {
-        history.replaceState(null, '', `#/${DEFAULT_VIEW}`);
+        try { history.replaceState(null, '', `#/${DEFAULT_VIEW}`); } catch { /* sandboxed frame: keep going without a hash */ }
         return show(DEFAULT_VIEW, { userInitiated: false });
     }
     show(name, { userInitiated });
