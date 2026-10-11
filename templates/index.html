@@ -2,252 +2,335 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BAS Stowage Management - Modern UI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <title>Stowage · BAS</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3Cpath d='M16 6.5 24.5 11v10L16 25.5 7.5 21V11z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M7.8 11.2 16 16l8.2-4.8M16 16v9.3' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="/static/css/styles.css">
+    <script type="module" src="/static/js/main.js"></script>
 </head>
-<body class="bg-slate-950 text-slate-200 font-sans antialiased">
+<body data-view="stowage">
 
-    <header class="bg-slate-900 shadow-md sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-semibold text-slate-100 flex items-center gap-3">
-                <i class="fas fa-boxes text-blue-500"></i>
-                <span>BAS Stowage Management</span>
-            </h1>
+    <!-- Icon sprite: stroke icons, 24×24 grid -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <symbol id="i-cube" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></symbol>
+            <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+            <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="m19 6-.9 13.1a2 2 0 0 1-2 1.9H7.9a2 2 0 0 1-2-1.9L5 6"/><path d="M10 11v5M14 11v5"/></symbol>
+            <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+            <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></symbol>
+            <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
+            <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+            <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+            <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+            <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></symbol>
+            <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></symbol>
+            <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13a.8.8 0 0 0 1.2.7l10.5-6.5a.8.8 0 0 0 0-1.4L8.2 4.8A.8.8 0 0 0 7 5.5z"/></symbol>
+            <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+            <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+            <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+            <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.5-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.5 4.5L20 16"/><path d="M20 20v-4h-4"/></symbol>
+            <symbol id="i-calculator" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 7.5h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></symbol>
+        </defs>
+    </svg>
+
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="app">
+
+        <!-- Sidebar on wide screens, tab bar on narrow ones -->
+        <nav class="nav" aria-label="Sections">
+            <div class="nav-brand">
+                <span class="brand-mark" aria-hidden="true"><svg class="icon"><use href="#i-cube"/></svg></span>
+                <span class="brand-text">
+                    <span class="brand-name">BAS</span>
+                    <span class="brand-sub">Stowage Management</span>
+                </span>
+            </div>
+            <ul class="nav-list">
+                <li><a class="nav-link" href="#/stowage" data-nav="stowage"><svg class="icon" aria-hidden="true"><use href="#i-cube"/></svg><span>Stowage</span></a></li>
+                <li><a class="nav-link" href="#/retrieval" data-nav="retrieval"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span>Retrieval</span></a></li>
+                <li><a class="nav-link" href="#/waste" data-nav="waste"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg><span>Waste</span></a></li>
+                <li><a class="nav-link" href="#/simulation" data-nav="simulation"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Simulation</span></a></li>
+                <li><a class="nav-link" href="#/records" data-nav="records"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg><span>Records</span></a></li>
+            </ul>
         </nav>
-    </header>
 
-    <main class="container mx-auto px-6 py-10">
-        <div id="messageArea" class="notification-banner hidden"></div>
+        <div class="content">
+            <div class="topbar" id="topbar">
+                <span class="topbar-title" id="topbarTitle" aria-hidden="true">Stowage</span>
+            </div>
 
-        <!-- ****MODIFIED GRID CLASS HERE**** -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
-            <!-- Added lg:grid-cols-3 and 2xl:grid-cols-4 -->
-            <!-- Removed xl breakpoint -->
+            <main id="main" class="main">
+                <noscript>
+                    <div class="callout" data-tone="error"><p class="callout-title">JavaScript is required</p></div>
+                </noscript>
 
-            <!-- Card: Initialization -->
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <i class="fas fa-cloud-upload-alt text-blue-400"></i>
-                        Initialization
-                    </h2>
-                    <p class="card-description">Upload data files and generate the initial placement plan.</p>
-                </div>
-                <div class="card-body space-y-4">
-                    <!-- Import Containers -->
-                    <form id="importContainersForm" class="space-y-3" enctype="multipart/form-data">
-                         <label class="file-upload-label">
-                            <input type="file" id="containersFile" name="containersFile" accept=".csv" required class="file-upload-input">
-                            <i class="fas fa-file-csv text-lg text-slate-500"></i>
-                            <span class="file-upload-text">Choose Containers CSV</span>
-                        </label>
-                        <button type="submit" class="button button-primary w-full justify-center">
-                            <i class="fas fa-upload"></i> Upload Containers
-                        </button>
-                        <pre id="containersResult" class="result-output hidden"></pre>
-                    </form>
-                    <hr class="subtle-divider">
-                    <!-- Import Items -->
-                    <form id="importItemsForm" class="space-y-3" enctype="multipart/form-data">
-                        <label class="file-upload-label">
-                            <input type="file" id="itemsFile" name="itemsFile" accept=".csv" required class="file-upload-input">
-                            <i class="fas fa-file-csv text-lg text-slate-500"></i>
-                            <span class="file-upload-text">Choose Items CSV</span>
-                         </label>
-                        <button type="submit" class="button button-primary w-full justify-center">
-                            <i class="fas fa-upload"></i> Upload Items
-                        </button>
-                        <pre id="itemsResult" class="result-output hidden"></pre>
-                    </form>
-                    <hr class="subtle-divider">
-                    <!-- Calculate Placement -->
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-medium text-slate-400">Placement Generation</h3>
-                        <button id="triggerPlacementButton" class="button button-secondary w-full justify-center">
-                            <i class="fas fa-calculator"></i> Calculate Placement Plan
-                        </button>
-                        <pre id="placementResult" class="result-output hidden"></pre>
-                    </div>
-                </div>
-            </section>
+                <!-- ───────────── Stowage ───────────── -->
+                <section class="view" id="view-stowage" data-title="Stowage" hidden>
+                    <header class="view-head">
+                        <h1 class="large-title" tabindex="-1">Stowage</h1>
+                        <p class="lead">Load your containers and items, then generate a placement plan.</p>
+                    </header>
 
-            <!-- Card: Item Operations -->
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <i class="fas fa-cogs text-teal-400"></i>
-                        Item Operations
-                    </h2>
-                    <p class="card-description">Search for items and manage retrieval processes.</p>
-                </div>
-                <div class="card-body space-y-5">
-                    <!-- Search -->
-                    <form id="searchForm" class="space-y-3">
-                         <label for="searchQuery" class="form-label">Search Item Location</label>
-                         <div class="flex gap-2">
-                            <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter Name or ID" required class="form-input flex-grow">
-                            <select id="searchType" name="searchType" class="form-select">
-                                <option value="itemName">Name</option>
-                                <option value="itemId">ID</option>
-                            </select>
-                            <button type="submit" class="button button-primary px-4 flex-shrink-0">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                        <pre id="searchResult" class="result-output hidden"></pre>
-                    </form>
-                    <hr class="subtle-divider">
-                     <!-- Confirm Retrieval -->
-                     <div>
-                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2">
-                            <i class="fas fa-hand-paper text-orange-400"></i>Confirm Item Retrieval
-                        </h3>
-                        <form id="retrieveForm" class="space-y-3">
-                            <label for="retrieveItemId" class="form-label">Item ID to Retrieve</label>
-                            <input type="text" id="retrieveItemId" name="itemId" placeholder="Enter Item ID" required class="form-input w-full">
-                            <button type="submit" class="button button-primary w-full justify-center">
-                                <i class="fas fa-check-circle"></i> Confirm Retrieval
-                            </button>
-                        </form>
-                        <pre id="retrieveResult" class="result-output hidden mt-3"></pre>
-                    </div>
-                    <hr class="subtle-divider">
-                     <!-- Identify Waste -->
-                     <div>
-                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2"><i class="fas fa-recycle text-red-400"></i>Identify Waste</h3>
-                        <button id="identifyWasteButton" class="button button-secondary w-full justify-center">
-                           <i class="fas fa-search-dollar"></i> Identify Potentially Wasted Items
-                        </button>
-                        <pre id="wasteIdentifyResult" class="result-output hidden mt-3"></pre>
-                     </div>
-                     <hr class="subtle-divider">
-                     <!-- Waste Return Plan -->
-                     <div>
-                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2">
-                            <i class="fas fa-clipboard-list text-green-400"></i>Generate Waste Return Plan
-                        </h3>
-                        <form id="wasteReturnPlanForm" class="space-y-3">
-                            <label for="undockingContainerId" class="form-label">Undocking Container ID</label>
-                            <input type="text" id="undockingContainerId" name="undockingContainerId" placeholder="Enter Container ID" required class="form-input w-full">
-
-                            <label for="undockingDate" class="form-label">Undocking Date</label>
-                            <div class="flex gap-2">
-                                <input type="date" id="undockingDate" name="undockingDate" required class="form-input flex-grow">
-                                <button type="button" id="setCurrentDateButton" class="button button-secondary px-4 flex-shrink-0">
-                                    Use Current Date
-                                </button>
+                    <ol class="steps">
+                        <li class="group step" id="step-containers">
+                            <div class="step-head">
+                                <span class="step-num" aria-hidden="true"><b>1</b><svg class="icon"><use href="#i-check"/></svg></span>
+                                <div>
+                                    <h2 class="group-title">Containers</h2>
+                                    <p class="group-sub">Zone and dimensions for each container.</p>
+                                </div>
                             </div>
+                            <form id="containersForm" class="stack">
+                                <label class="file-row">
+                                    <input class="sr-only" type="file" name="containersFile" accept=".csv,text/csv" required>
+                                    <span class="file-icon"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg></span>
+                                    <span class="file-meta">
+                                        <span class="file-name">Choose a CSV file</span>
+                                        <span class="file-hint">or drop it here</span>
+                                    </span>
+                                    <span class="file-browse">Browse</span>
+                                </label>
+                                <details class="raw hint"><summary>Expected columns</summary><p class="footnote"><code>zone</code>, <code>container_id</code>, <code>width_cm</code>, <code>depth_cm</code>, <code>height_cm</code></p></details>
+                                <div><button class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Upload containers</button></div>
+                            </form>
+                            <div class="output" id="containersOut" aria-live="polite"></div>
+                        </li>
 
-                            <label for="maxWeight" class="form-label">Maximum Weight (kg)</label>
-                            <input type="number" id="maxWeight" name="maxWeight" placeholder="Enter Max Weight" required min="1" class="form-input w-full">
+                        <li class="group step" id="step-items">
+                            <div class="step-head">
+                                <span class="step-num" aria-hidden="true"><b>2</b><svg class="icon"><use href="#i-check"/></svg></span>
+                                <div>
+                                    <h2 class="group-title">Items</h2>
+                                    <p class="group-sub">Size, mass and priority for each item.</p>
+                                </div>
+                            </div>
+                            <form id="itemsForm" class="stack">
+                                <label class="file-row">
+                                    <input class="sr-only" type="file" name="itemsFile" accept=".csv,text/csv" required>
+                                    <span class="file-icon"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg></span>
+                                    <span class="file-meta">
+                                        <span class="file-name">Choose a CSV file</span>
+                                        <span class="file-hint">or drop it here</span>
+                                    </span>
+                                    <span class="file-browse">Browse</span>
+                                </label>
+                                <details class="raw hint"><summary>Expected columns</summary><p class="footnote"><code>itemId</code>, <code>name</code>, <code>width</code>, <code>depth</code>, <code>height</code>, <code>mass</code>, <code>priority</code>. Optional: <code>expiry_date</code>, <code>usage_limit</code>, <code>preferred_zone</code></p></details>
+                                <div><button class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Upload items</button></div>
+                            </form>
+                            <div class="output" id="itemsOut" aria-live="polite"></div>
+                        </li>
 
-                            <button type="submit" class="button button-primary w-full justify-center">
-                                <i class="fas fa-clipboard-check"></i> Generate Return Plan
-                            </button>
-                        </form>
-                        <pre id="wasteReturnPlanResult" class="result-output hidden mt-3"></pre>
-                     </div>
-                </div>
-            </section>
+                        <li class="group step step-wide" id="step-placement">
+                            <div class="step-head">
+                                <span class="step-num" aria-hidden="true"><b>3</b><svg class="icon"><use href="#i-check"/></svg></span>
+                                <div>
+                                    <h2 class="group-title">Placement plan</h2>
+                                    <p class="group-sub">Pack items into containers, honouring priority and preferred zones.</p>
+                                </div>
+                            </div>
+                            <div><button class="btn btn-primary" type="button" id="placementBtn"><svg class="icon" aria-hidden="true"><use href="#i-calculator"/></svg>Calculate placement plan</button></div>
+                            <div class="output" id="placementOut" aria-live="polite"></div>
+                        </li>
+                    </ol>
+                </section>
 
-            <!-- Card: Simulation -->
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <i class="fas fa-forward text-indigo-400"></i>
-                        Day Simulation
-                    </h2>
-                     <p class="card-description">Simulate daily operations and observe stock changes.</p>
-                </div>
-                <div class="card-body">
-                    <form id="simulateForm" class="space-y-4">
+                <!-- ───────────── Retrieval ───────────── -->
+                <section class="view" id="view-retrieval" data-title="Retrieval" hidden>
+                    <header class="view-head">
+                        <h1 class="large-title" tabindex="-1">Retrieval</h1>
+                        <p class="lead">Find where an item is stowed, see what’s in the way, and confirm once it’s out.</p>
+                    </header>
+
+                    <div class="stack-lg">
+                        <section class="group">
+                            <div>
+                                <h2 class="group-title">Find an item</h2>
+                                <p class="group-sub">Searches the current stowage plan.</p>
+                            </div>
+                            <form id="searchForm" class="stack" novalidate>
+                                <div class="field">
+                                    <label class="label" for="searchQuery">Item</label>
+                                    <div class="row">
+                                        <input class="input grow" id="searchQuery" name="searchQuery" type="text" autocomplete="off" placeholder="Exact item name" required>
+                                        <fieldset class="seg" id="searchType">
+                                            <legend class="sr-only">Search by</legend>
+                                            <span class="seg-thumb" aria-hidden="true"></span>
+                                            <label><input type="radio" name="searchType" value="itemName" checked><span>Name</span></label>
+                                            <label><input type="radio" name="searchType" value="itemId"><span>ID</span></label>
+                                        </fieldset>
+                                        <button class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="output" id="searchOut" aria-live="polite"></div>
+                        </section>
+
+                        <section class="group">
+                            <div>
+                                <h2 class="group-title">Retrieve by ID</h2>
+                                <p class="group-sub">Skip the search and record a retrieval directly. This counts as one use.</p>
+                            </div>
+                            <form id="retrieveForm" class="stack" novalidate>
+                                <div class="field">
+                                    <label class="label" for="retrieveItemId">Item ID</label>
+                                    <div class="row">
+                                        <input class="input grow" id="retrieveItemId" name="itemId" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 4821" required>
+                                        <button class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Confirm retrieval</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="output" id="retrieveOut" aria-live="polite"></div>
+                        </section>
+                    </div>
+                </section>
+
+                <!-- ───────────── Waste ───────────── -->
+                <section class="view" id="view-waste" data-title="Waste" hidden>
+                    <header class="view-head">
+                        <h1 class="large-title" tabindex="-1">Waste</h1>
+                        <p class="lead">Spot expired and used-up items, then plan what goes back on the undocking container.</p>
+                    </header>
+
+                    <div class="stack-lg">
+                        <section class="group">
+                            <div>
+                                <h2 class="group-title">Expired &amp; used-up items</h2>
+                                <p class="group-sub">Items past their expiry date or out of uses.</p>
+                            </div>
+                            <div><button class="btn btn-secondary" type="button" id="wasteScanBtn"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>Identify waste</button></div>
+                            <div class="output" id="wasteOut" aria-live="polite"></div>
+                        </section>
+
+                        <section class="group">
+                            <div>
+                                <h2 class="group-title">Return plan</h2>
+                                <p class="group-sub">Choose the container that leaves the station and how much it can carry.</p>
+                            </div>
+                            <form id="returnForm" class="stack">
+                                <div class="form-grid">
+                                    <div class="field">
+                                        <label class="label" for="undockingContainerId">Undocking container</label>
+                                        <input class="input" id="undockingContainerId" name="undockingContainerId" type="text" autocomplete="off" placeholder="Container ID" required>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label" for="undockingDate">Undocking date</label>
+                                        <input class="input" id="undockingDate" name="undockingDate" type="date" required>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label" for="maxWeight">Max weight (kg)</label>
+                                        <input class="input" id="maxWeight" name="maxWeight" type="number" inputmode="decimal" min="1" step="any" placeholder="e.g. 500" required>
+                                    </div>
+                                </div>
+                                <div><button class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>Generate return plan</button></div>
+                            </form>
+                            <div class="output" id="returnOut" aria-live="polite"></div>
+                        </section>
+                    </div>
+                </section>
+
+                <!-- ───────────── Simulation ───────────── -->
+                <section class="view" id="view-simulation" data-title="Simulation" hidden>
+                    <header class="view-head">
+                        <h1 class="large-title" tabindex="-1">Simulation</h1>
+                        <p class="lead">Advance the mission clock and see what expires or runs out.</p>
+                    </header>
+
+                    <section class="group">
                         <div>
-                            <label for="simulateDays" class="form-label">Number of Days to Simulate</label>
-                            <input type="number" id="simulateDays" name="numOfDays" value="1" min="1" required class="form-input w-full">
+                            <h2 class="group-title">Advance time</h2>
+                            <p class="group-sub">Each simulated day, the items you list are used once.</p>
                         </div>
-                        <div>
-                             <label for="simulateItems" class="form-label">Daily Items Used <span class="text-slate-500 text-xs">(Optional, comma-separated IDs)</span></label>
-                             <input type="text" id="simulateItems" name="itemsToBeUsedPerDay" placeholder="item-123, item-456" class="form-input w-full">
-                        </div>
-                        <button type="submit" class="button button-primary w-full justify-center">
-                            <i class="fas fa-play-circle"></i> Run Simulation
-                        </button>
-                    </form>
-                     <pre id="simulateResult" class="result-output hidden mt-4"></pre>
-                </div>
-            </section>
-
-             <!-- Card: Export & Logs -->
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <i class="fas fa-database text-emerald-400"></i>
-                        Export & Logs
-                    </h2>
-                     <p class="card-description">Download stowage data and filter activity records.</p>
-                </div>
-                <div class="card-body space-y-5">
-                    <!-- Export -->
-                     <div>
-                        <h3 class="text-sm font-medium text-slate-400 mb-2">Export Data</h3>
-                        <a href="/api/export/arrangement" download class="button button-secondary w-full justify-center">
-                            <i class="fas fa-download"></i> Export Current Arrangement (CSV)
-                        </a>
-                    </div>
-                    <hr class="subtle-divider">
-                    <!-- Activity Logs -->
-                    <div>
-                        <h3 class="text-sm font-medium text-slate-400 flex items-center gap-2 mb-2">
-                            <i class="fas fa-file-alt text-blue-400"></i>Activity Logs
-                        </h3>
-                        <form id="logsForm" class="space-y-3">
-                            <label for="startDate" class="form-label">Start Date</label>
-                            <div class="flex gap-2">
-                                <input type="date" id="startDate" name="startDate" class="form-input flex-grow">
-                                <button type="button" id="setEarliestDateButton" class="button button-secondary px-4 flex-shrink-0">
-                                    Earliest Date
-                                </button>
+                        <form id="simForm" class="stack" novalidate>
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label class="label" for="simDays">Days to simulate</label>
+                                    <div class="stepper">
+                                        <button class="stepper-btn" type="button" data-step="-1" aria-label="One day fewer"><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+                                        <input id="simDays" name="numOfDays" type="number" inputmode="numeric" min="1" max="3650" step="1" value="1" required>
+                                        <button class="stepper-btn" type="button" data-step="1" aria-label="One day more"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+                                    </div>
+                                </div>
+                                <div class="field field-wide">
+                                    <label class="label" for="simItems">Items used each day <span class="optional">Optional</span></label>
+                                    <input class="input" id="simItems" name="itemsToBeUsedPerDay" type="text" autocomplete="off" placeholder="e.g. 12, 40, 97">
+                                </div>
                             </div>
-
-                            <label for="endDate" class="form-label">End Date</label>
-                            <div class="flex gap-2">
-                                <input type="date" id="endDate" name="endDate" class="form-input flex-grow">
-                                <button type="button" id="setLatestDateButton" class="button button-secondary px-4 flex-shrink-0">
-                                    Latest Date
-                                </button>
-                            </div>
-
-                            <label for="itemId" class="form-label">Item ID</label>
-                            <input type="text" id="itemId" name="itemId" placeholder="Enter Item ID" class="form-input w-full">
-
-                            <label for="userId" class="form-label">User ID</label>
-                            <input type="text" id="userId" name="userId" placeholder="Enter User ID" class="form-input w-full">
-
-                            <label for="actionType" class="form-label">Action Type</label>
-                            <input type="text" id="actionType" name="actionType" placeholder="Enter Action Type" class="form-input w-full">
-
-                            <button type="submit" class="button button-primary w-full justify-center">
-                                <i class="fas fa-search"></i> Search Logs
-                            </button>
+                            <div><button class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Run simulation</button></div>
                         </form>
-                        <pre id="logsResult" class="result-output hidden mt-3"></pre>
+                        <div class="output" id="simOut" aria-live="polite"></div>
+                    </section>
+                </section>
+
+                <!-- ───────────── Records ───────────── -->
+                <section class="view" id="view-records" data-title="Records" hidden>
+                    <header class="view-head">
+                        <h1 class="large-title" tabindex="-1">Records</h1>
+                        <p class="lead">Export the current arrangement and review everything that’s happened.</p>
+                    </header>
+
+                    <div class="stack-lg">
+                        <section class="group group-inline">
+                            <div>
+                                <h2 class="group-title">Current arrangement</h2>
+                                <p class="group-sub">Every item with its container and coordinates, as CSV.</p>
+                            </div>
+                            <a class="btn btn-secondary" href="/api/export/arrangement" download><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Export CSV</a>
+                        </section>
+
+                        <section class="group">
+                            <div class="group-head-row">
+                                <div>
+                                    <h2 class="group-title">Activity log</h2>
+                                    <p class="group-sub">Newest first. Leave filters empty to see everything.</p>
+                                </div>
+                                <button class="btn btn-plain" type="button" id="logsRefresh"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>Refresh</button>
+                            </div>
+                            <form id="logsForm" class="stack">
+                                <div class="form-grid form-grid-5">
+                                    <div class="field">
+                                        <label class="label" for="startDate">From</label>
+                                        <input class="input" id="startDate" name="startDate" type="date">
+                                    </div>
+                                    <div class="field">
+                                        <label class="label" for="endDate">To</label>
+                                        <input class="input" id="endDate" name="endDate" type="date">
+                                    </div>
+                                    <div class="field">
+                                        <label class="label" for="logItemId">Subject</label>
+                                        <input class="input" id="logItemId" name="itemId" type="text" autocomplete="off" placeholder="Item ID">
+                                    </div>
+                                    <div class="field">
+                                        <label class="label" for="logUserId">User</label>
+                                        <input class="input" id="logUserId" name="userId" type="text" autocomplete="off" placeholder="User ID">
+                                    </div>
+                                    <div class="field">
+                                        <label class="label" for="logAction">Action</label>
+                                        <input class="input" id="logAction" name="actionType" type="text" autocomplete="off" list="actionTypes" placeholder="Any">
+                                        <datalist id="actionTypes">
+                                            <option value="placement"></option>
+                                            <option value="search"></option>
+                                            <option value="retrieve"></option>
+                                            <option value="simulation"></option>
+                                            <option value="import"></option>
+                                            <option value="export"></option>
+                                        </datalist>
+                                    </div>
+                                </div>
+                                <div><button class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>Apply filters</button></div>
+                            </form>
+                            <div class="output" id="logsOut" aria-live="polite"></div>
+                        </section>
                     </div>
-                    <hr class="subtle-divider">
-                </div>
-            </section>
+                </section>
+            </main>
+        </div>
+    </div>
 
-        </div> <!-- End grid -->
-    </main>
-
-    <footer class="text-center py-6 mt-10 border-t border-slate-800">
-        <p class="text-xs text-slate-500">© 2023 BAS Stowage Management System. All rights reserved.</p>
-    </footer>
-
-    <script src="/static/js/main.js"></script>
+    <div class="toasts" id="toasts" role="region" aria-label="Notifications" aria-live="polite"></div>
 </body>
 </html>
